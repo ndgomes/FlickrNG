@@ -20,9 +20,9 @@ const flickr = axios.create({
   params: defaultParams,
 });
 
-app.get("/getPhotos", async (req, res) => {
+app.get("/getImages", async (req, res) => {
   const query = req.query.query;
-  const perPage = req.query.perPage || 10;
+  const perPage = req.query.perPage || 24;
 
   const userAgent = req.headers["user-agent"] || "Mozilla/5.0";
 

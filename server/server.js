@@ -1,11 +1,14 @@
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
 const app = express();
 const PORT = 8080;
+
+app.use(cors());
 
 const flickrApiKey = process.env.FLICKR_API_KEY;
 const flickrBaseUrl = "https://www.flickr.com/services/rest/";
@@ -23,6 +26,7 @@ const flickr = axios.create({
 app.get("/getImages", async (req, res) => {
   const query = req.query.query;
   const perPage = req.query.perPage || 24;
+  const page = req.query.page || 1;
 
   const userAgent = req.headers["user-agent"] || "Mozilla/5.0";
 
@@ -31,6 +35,7 @@ app.get("/getImages", async (req, res) => {
       params: {
         text: query,
         per_page: perPage,
+        page,
       },
       headers: {
         "User-Agent": userAgent,
@@ -38,6 +43,7 @@ app.get("/getImages", async (req, res) => {
     });
 
     const data = response.data;
+
     const images = data.photos.photo.map((photo) => ({
       id: photo.id,
       title: photo.title,

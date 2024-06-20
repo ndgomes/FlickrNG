@@ -2,7 +2,12 @@
 
 const nextConfig = {
   images: {
-    domains: ["live.staticflickr.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 };
 

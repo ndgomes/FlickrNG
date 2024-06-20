@@ -22,7 +22,7 @@ export function SearchInput() {
       return null;
     }
 
-    router.push(`/search?q=${query}`);
+    router.push(`/search?q=${query}&p=1`);
   }
 
   return (

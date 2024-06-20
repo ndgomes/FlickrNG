@@ -13,6 +13,7 @@ interface Image {
   id: number;
   title: string;
   url: string;
+  orginalUrl: string;
 }
 
 async function searchImages(query: string): Promise<Image[]> {
@@ -50,7 +51,7 @@ export default async function Search({ searchParams }: SearchProps) {
         {images.map((img) => {
           return (
             <Link
-              href={img.url}
+              href={img.orginalUrl}
               className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
               key={img.id}
             >
@@ -62,7 +63,12 @@ export default async function Search({ searchParams }: SearchProps) {
                   height={320}
                   quality={100}
                   alt={img.title}
+                  priority={true}
                 />
+
+                <div className="opacity-0 bg-black group-hover:opacity-100 bg-opacity-50 duration-500 absolute inset-0 flex justify-center text-center items-end p-2 text-xl text-white font-semibold">
+                  {img.title}
+                </div>
               </div>
             </Link>
           );

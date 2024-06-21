@@ -48,7 +48,7 @@ app.get("/getImages", async (req, res) => {
       id: photo.id,
       title: photo.title,
       url: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`,
-      orginalUrl: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
+      originalUrl: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
     }));
 
     res.json({

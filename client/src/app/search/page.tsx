@@ -86,7 +86,7 @@ export default function Search({ searchParams }: SearchProps) {
             return (
               <button
                 key={img.id}
-                onClick={() => showModal(img.url)}
+                onClick={() => showModal(img.originalUrl)}
                 className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
               >
                 <div className="w-full h-80 sm:h-64 md:h-72 lg:h-80 xl:h-96 2xl:h-80">
@@ -108,17 +108,23 @@ export default function Search({ searchParams }: SearchProps) {
           })}
 
           {modalOpen && (
-            <div className="fixed top-0 left-0 z-50 w-full h-full bg-black/85 flex justify-center items-center">
+            <div
+              className="fixed top-0 left-0 z-50 w-full h-full bg-black/85 flex justify-center items-center"
+              onClick={closeModal}
+            >
               <a
                 className="fixed z-90 top-6 right-8 text-white text-5xl font-bold cursor-pointer"
                 onClick={closeModal}
               >
                 <X />
               </a>
-              <img
-                className="w-auto h-auto max-w-[800px] max-h-[600px] object-cover"
+              <Image
+                className="max-w-[800px] max-h-[600px] object-cover rounded-lg m-3"
                 src={modalImgSrc}
-                alt="Modal"
+                width={800}
+                height={600}
+                quality={100}
+                alt="ImageModal"
               />
             </div>
           )}

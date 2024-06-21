@@ -1,6 +1,4 @@
 import { SearchHeader } from "@/components/searchHeader";
-import { Suspense } from "react";
-import SearchLoading from "./loading";
 
 export default function SearchLayout({
   children,

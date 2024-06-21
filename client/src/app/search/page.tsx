@@ -131,7 +131,7 @@ export default async function Search({ searchParams }: SearchProps) {
       </div>
 
       <Pagination
-        initialPage={page}
+        currentPage={page}
         maximumPages={data?.pages}
         onClickNext={handleOnClickNextPage}
         onClickPrevious={handleOnClickPreviousPage}

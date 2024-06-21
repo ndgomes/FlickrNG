@@ -4,11 +4,16 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center mx-auto min-h-screen w-full max-w-[1600px]">
-      <Link href="/" className="text-7xl font-extrabold text-blue-500">
+    <div className="flex flex-col items-center justify-center mx-auto min-h-screen w-full max-w-[1600px] p-4 sm:p-8">
+      <Link
+        href="/"
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-500"
+      >
         Flickr<span className="text-pink-500">NG</span>
       </Link>
-      <p className="font-semibold mb-8">Image Search Engine</p>
+      <p className="font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8">
+        Image Search Engine
+      </p>
 
       <Suspense>
         <SearchInput />

@@ -1,5 +1,6 @@
 import { SearchInput } from "@/components/searchInput";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -9,7 +10,9 @@ export default function Home() {
       </Link>
       <p className="font-semibold mb-8">Image Search Engine</p>
 
-      <SearchInput />
+      <Suspense>
+        <SearchInput />
+      </Suspense>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { SearchInput } from "./searchInput";
+import { Suspense } from "react";
+import { Skeleton } from "./skeleton";
 
 export function SearchHeader() {
   return (
@@ -9,7 +11,9 @@ export function SearchHeader() {
           Flickr<span className="text-pink-500">NG</span>
         </Link>
 
-        <SearchInput />
+        <Suspense fallback={<Skeleton />}>
+          <SearchInput />
+        </Suspense>
       </div>
     </div>
   );

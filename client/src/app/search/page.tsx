@@ -1,12 +1,13 @@
 "use client";
 
-import { FetchApi } from "@/api/fetchApi";
-import Pagination from "@/components/pagination";
 import { Skeleton } from "@/components/skeleton";
+import Pagination from "@/components/pagination";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect } from "react";
+import useImages from "@/hooks/useImages";
+import SearchLoading from "./loading";
 
 interface SearchProps {
   searchParams: {
@@ -15,36 +16,11 @@ interface SearchProps {
   };
 }
 
-interface ImagesInterface {
-  images: {
-    id: number;
-    title: string;
-    url: string;
-    originalUrl: string;
-  }[];
-  pages: number;
-  total: number;
-}
-
-async function SearchImages(
-  query: string,
-  page: number
-): Promise<ImagesInterface> {
-  const response = await FetchApi(`/getImages?query=${query}&page=${page}`, {
-    next: {
-      revalidate: 60 * 60, // 1 hour
-    },
-  });
-
-  const data = await response.json();
-
-  return data;
-}
-
-export default async function Search({ searchParams }: SearchProps) {
+export default function Search({ searchParams }: SearchProps) {
   const router = useRouter();
-  const [data, setData] = useState<ImagesInterface | null>(null);
   const { q: query, p: page } = searchParams;
+  const pageNumber = parseInt(page.toString(), 10);
+  const { data, loading } = useImages(query, pageNumber);
 
   useEffect(() => {
     if (!query) {
@@ -56,36 +32,27 @@ export default async function Search({ searchParams }: SearchProps) {
       router.replace(`/search?q=${query}&p=1`);
       return;
     }
-
-    const fetchData = async () => {
-      const result = await SearchImages(query, page);
-      setData(result);
-    };
-
-    fetchData();
   }, [query, page, router]);
 
-  if (data && page > data.pages) {
+  if (data && pageNumber > data.pages) {
     router.replace(`/search?q=${query}&p=1`);
     return null;
   }
 
   function handleOnClickPreviousPage() {
-    const pageNum = parseInt(page as any, 10);
-    if (pageNum > 1) {
-      router.push(`/search?q=${query}&p=${pageNum - 1}`);
+    if (pageNumber > 1) {
+      router.push(`/search?q=${query}&p=${pageNumber - 1}`);
     }
   }
 
   function handleOnClickNextPage() {
-    const pageNum = parseInt(page as any, 10);
-    if (data && pageNum < data.total) {
-      router.push(`/search?q=${query}&p=${pageNum + 1}`);
+    if (data && pageNumber < data.pages) {
+      router.push(`/search?q=${query}&p=${pageNumber + 1}`);
     }
   }
 
-  if (!data) {
-    return <Skeleton />;
+  if (loading) {
+    return <SearchLoading />;
   }
 
   return (
@@ -131,7 +98,7 @@ export default async function Search({ searchParams }: SearchProps) {
       </div>
 
       <Pagination
-        currentPage={page}
+        currentPage={pageNumber}
         maximumPages={data?.pages}
         onClickNext={handleOnClickNextPage}
         onClickPrevious={handleOnClickPreviousPage}

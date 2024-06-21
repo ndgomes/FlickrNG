@@ -68,7 +68,7 @@ export default function Search({ searchParams }: SearchProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
           {data?.images.map((img) => {
             return (
               <Link
@@ -76,7 +76,7 @@ export default function Search({ searchParams }: SearchProps) {
                 href={img.originalUrl || img.url}
                 className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
               >
-                <div className="w-80 h-80">
+                <div className="w-full h-80 sm:h-64 md:h-72 lg:h-80 xl:h-96 2xl:h-80">
                   <Image
                     src={img.url}
                     className="group-hover:scale-105 transition-transform duration-500 rounded-lg object-cover w-full h-full"

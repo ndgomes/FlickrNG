@@ -1,13 +1,12 @@
 "use client";
 
-import { Skeleton } from "@/components/skeleton";
 import Pagination from "@/components/pagination";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useImages from "@/hooks/useImages";
 import SearchLoading from "./loading";
+import { X } from "lucide-react";
 
 interface SearchProps {
   searchParams: {
@@ -18,6 +17,10 @@ interface SearchProps {
 
 export default function Search({ searchParams }: SearchProps) {
   const router = useRouter();
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalImgSrc, setModalImgSrc] = useState<string>("");
+
   const { q: query, p: page } = searchParams;
   const pageNumber = parseInt(page.toString(), 10);
   const { data, loading } = useImages(query, pageNumber);
@@ -51,6 +54,16 @@ export default function Search({ searchParams }: SearchProps) {
     }
   }
 
+  function showModal(src: string) {
+    setModalOpen(true);
+    setModalImgSrc(src);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+    setModalImgSrc("");
+  }
+
   if (loading) {
     return <SearchLoading />;
   }
@@ -71,9 +84,9 @@ export default function Search({ searchParams }: SearchProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
           {data?.images.map((img) => {
             return (
-              <Link
+              <button
                 key={img.id}
-                href={img.originalUrl || img.url}
+                onClick={() => showModal(img.url)}
                 className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-end"
               >
                 <div className="w-full h-80 sm:h-64 md:h-72 lg:h-80 xl:h-96 2xl:h-80">
@@ -86,14 +99,29 @@ export default function Search({ searchParams }: SearchProps) {
                     alt={img.title}
                     priority={true}
                   />
-
                   <div className="opacity-0 bg-black group-hover:opacity-100 bg-opacity-50 duration-500 absolute inset-0 flex justify-center text-center items-end p-2 text-xl text-white font-semibold">
                     {img.title}
                   </div>
                 </div>
-              </Link>
+              </button>
             );
           })}
+
+          {modalOpen && (
+            <div className="fixed top-0 left-0 z-50 w-full h-full bg-black/85 flex justify-center items-center">
+              <a
+                className="fixed z-90 top-6 right-8 text-white text-5xl font-bold cursor-pointer"
+                onClick={closeModal}
+              >
+                <X />
+              </a>
+              <img
+                className="w-auto h-auto max-w-[800px] max-h-[600px] object-cover"
+                src={modalImgSrc}
+                alt="Modal"
+              />
+            </div>
+          )}
         </div>
       </div>
 

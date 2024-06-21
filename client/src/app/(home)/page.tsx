@@ -11,9 +11,7 @@ export default function Home() {
       >
         Flickr<span className="text-pink-500">NG</span>
       </Link>
-      <p className="font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8">
-        Image Search Engine
-      </p>
+      <p className="font-semibold text-xl mb-8">Image Search Engine</p>
 
       <Suspense>
         <SearchInput />

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import useImages from "@/hooks/useImages";
 import SearchLoading from "./loading";
 import { X } from "lucide-react";
+import CustomImage from "@/components/customImage";
 
 interface SearchProps {
   searchParams: {
@@ -118,14 +119,8 @@ export default function Search({ searchParams }: SearchProps) {
               >
                 <X />
               </a>
-              <Image
-                className="max-w-[800px] max-h-[600px] object-cover rounded-lg m-3"
-                src={modalImgSrc}
-                width={800}
-                height={600}
-                quality={100}
-                alt="ImageModal"
-              />
+
+              <CustomImage src={modalImgSrc} />
             </div>
           )}
         </div>

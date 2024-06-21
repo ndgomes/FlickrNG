@@ -23,48 +23,55 @@ export default function Search({ searchParams }: SearchProps) {
   const [modalImgSrc, setModalImgSrc] = useState<string>("");
 
   const { q: query, p: page } = searchParams;
-  const pageNumber = parseInt(page.toString(), 10);
-  const { data, loading } = useImages(query, pageNumber);
+  const pageNumber = parseInt(page.toString(), 10); // Convert page number to integer
+  const { data, loading } = useImages(query, pageNumber); // Custom hook for fetching images based on query and page number
 
+  // UseEffect to handle navigation and error handling
   useEffect(() => {
     if (!query) {
-      router.replace("/");
+      router.replace("/"); // Redirect to home if query is not provided
       return;
     }
 
     if (!page) {
-      router.replace(`/search?q=${query}&p=1`);
+      router.replace(`/search?q=${query}&p=1`); // Redirect to first page of search results if page is not provided
       return;
     }
   }, [query, page, router]);
 
+  // Check if page number exceeds total pages
   if (data && pageNumber > data.pages) {
     router.replace(`/search?q=${query}&p=1`);
     return null;
   }
 
+  // Function to handle previous page navigation
   function handleOnClickPreviousPage() {
     if (pageNumber > 1) {
       router.push(`/search?q=${query}&p=${pageNumber - 1}`);
     }
   }
 
+  // Function to handle next page navigation
   function handleOnClickNextPage() {
     if (data && pageNumber < data.pages) {
       router.push(`/search?q=${query}&p=${pageNumber + 1}`);
     }
   }
 
+  // Function to open modal and set modal image source
   function showModal(src: string) {
     setModalOpen(true);
     setModalImgSrc(src);
   }
 
+  // Function to close modal and reset modal image source
   function closeModal() {
     setModalOpen(false);
     setModalImgSrc("");
   }
 
+  // Show Skeleton loading while images are being loaded
   if (loading) {
     return <SearchLoading />;
   }
@@ -82,6 +89,7 @@ export default function Search({ searchParams }: SearchProps) {
           </p>
         </div>
 
+        {/* Grid layout to display images */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
           {data?.images.map((img) => {
             return (
@@ -108,6 +116,7 @@ export default function Search({ searchParams }: SearchProps) {
             );
           })}
 
+          {/* Modal for displaying full-size image */}
           {modalOpen && (
             <div
               className="fixed top-0 left-0 z-50 w-full h-full bg-black/85 flex justify-center items-center"
@@ -120,12 +129,14 @@ export default function Search({ searchParams }: SearchProps) {
                 <X />
               </a>
 
+              {/* CustomImage component to display full-size image */}
               <CustomImage src={modalImgSrc} />
             </div>
           )}
         </div>
       </div>
 
+      {/* Pagination component for navigating through pages */}
       <Pagination
         currentPage={pageNumber}
         maximumPages={data?.pages}

@@ -18,8 +18,11 @@ export default function CustomImage(props: CustomImageProps) {
   });
 
   useEffect(() => {
+    // Create a new image element
     const img = new window.Image();
     img.src = props.src;
+
+    // Update dimensions when image loads
     img.onload = () => {
       setDimensions({ width: img.width, height: img.height });
     };
@@ -30,6 +33,7 @@ export default function CustomImage(props: CustomImageProps) {
   // Avoid rendering until dimensions are loaded
   if (!width || !height) return null;
 
+  // Render Image component with calculated dimensions
   return (
     <Image
       className={`object-cover rounded-lg m-3 ${props.className}`}
